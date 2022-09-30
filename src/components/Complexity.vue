@@ -4,10 +4,7 @@ import { ComplexityEnum } from "../interfaces/Complexity";
 
 const emit = defineEmits(["changeComplexity"]);
 const { selectedComplexity } = defineProps({
-  selectedComplexity: {
-    type: Number as PropType<ComplexityEnum>,
-    required: true,
-  },
+  selectedComplexity: { type: Number as PropType<ComplexityEnum>, required: true },
 });
 
 const handleComplexityChange = (newComplexity: ComplexityEnum) => {

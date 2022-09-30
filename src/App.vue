@@ -3,7 +3,6 @@ import { computed, reactive } from "vue";
 import Complexity from "./components/Complexity.vue";
 import Logo from "./components/Logo.vue";
 import { ComplexityEnum } from "./interfaces/Complexity";
-import { generateQuestion } from "./utils/generator";
 import { getFromLocalStorage, setToLocalStorage } from "./utils/localStorage";
 import Game from "./components/Game.vue";
 

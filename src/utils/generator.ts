@@ -5,7 +5,7 @@ export const generateExpression = (complexity: ComplexityEnum, step: number) => 
   const operators = ["-", "+", "*", "/"];
   const expression = new Array<string | number>();
   for (let i = 0; i < scale; i++) {
-    const numbo = generateRandomNumber(0, scale * step);
+    const numbo = generateRandomNumber(1, scale * step);
 
     if (i !== 0) {
       const symbol = generateRandomNumber(0, 3);
@@ -17,11 +17,13 @@ export const generateExpression = (complexity: ComplexityEnum, step: number) => 
 };
 
 export const generateFakeAnswers = (rightAnswer: number, count: number, width: number) => {
-  const border = rightAnswer + width * 2;
-  const fakeAnswers = [...new Array<number>(count)].map((fakeAnsw) =>
-    generateRandomNumber(-Math.round(border / 2), Math.round(border / 2))
-  );
-  return fakeAnswers;
+  const border = Math.abs(rightAnswer) + (width + 20) * 2;
+  const buffer = new Set<number>([rightAnswer]);
+  while (buffer.size < count + 1) {
+    buffer.add(generateRandomNumber(border * -1, border));
+  }
+
+  return [...buffer].slice(1);
 };
 
 const generateRandomNumber = (min: number, max: number) => {

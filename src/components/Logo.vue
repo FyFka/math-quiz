@@ -1,4 +1,6 @@
-<template><h1 class="app-name">Math quiz</h1></template>
+<template>
+  <h1 class="app-name">Math quiz</h1>
+</template>
 
 <style scoped>
 .app-name {

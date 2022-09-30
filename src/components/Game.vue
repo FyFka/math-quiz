@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted, PropType, reactive } from "vue";
+import { onMounted, PropType, reactive, ref } from "vue";
 import { ComplexityEnum } from "../interfaces/Complexity";
 import { generateExpression, generateFakeAnswers } from "../utils/generator";
 import { shuffleArray } from "../utils/shuffle";
+import GameInfo from "./GameInfo.vue";
+import Timer from "./Timer.vue";
 
 interface IGameState {
   currentQuestion: string;
@@ -14,11 +16,10 @@ interface IGameState {
 }
 
 const { selectedComplexity } = defineProps({
-  selectedComplexity: {
-    type: Number as PropType<ComplexityEnum>,
-    required: true,
-  },
+  selectedComplexity: { type: Number as PropType<ComplexityEnum>, required: true },
 });
+
+const timerRef = ref<null | { refresh: (seconds: number) => void }>(null);
 
 const state = reactive<IGameState>({
   currentQuestion: "",
@@ -40,11 +41,16 @@ const handleUserAnswer = (userAnswer: number) => {
   newQuestion();
 };
 
+const handleTimeOver = () => {
+  checkAnswer();
+  newQuestion();
+};
+
 const newQuestion = () => {
   const question = generateExpression(selectedComplexity, state.step);
   const rightAnswer = getRightAnswer(question);
-  const answers = generateFakeAnswers(1, +selectedComplexity, 5).concat(rightAnswer);
-
+  const answers = generateFakeAnswers(rightAnswer, +selectedComplexity, state.step).concat(rightAnswer);
+  refreshTimer(Math.ceil(15 - state.step / 2) + 5);
   state.rightAnswer = rightAnswer;
   state.currentQuestion = question.join("");
   state.answers = shuffleArray(answers);
@@ -52,12 +58,16 @@ const newQuestion = () => {
 };
 
 const getRightAnswer = (expression: (string | number)[]) => {
-  return +Number.parseFloat(new Function(`return ${expression.join("")}`)()).toFixed(1);
+  return +new Function(`return ${expression.join("")}`)().toFixed(1);
 };
 
-const checkAnswer = (userAnswer: number) => {
+const refreshTimer = (seconds: number) => {
+  timerRef.value?.refresh(seconds);
+};
+
+const checkAnswer = (userAnswer?: number) => {
   if (userAnswer === state.rightAnswer) {
-    state.score += +Math.round(selectedComplexity * state.step).toFixed(1);
+    state.score += +(selectedComplexity * state.step).toFixed(1);
   } else {
     const lives = state.lives;
     state.lives.pop();
@@ -69,6 +79,7 @@ const checkAnswer = (userAnswer: number) => {
 </script>
 
 <template>
+  <Timer @time-over="handleTimeOver" ref="timerRef" />
   <div class="game">
     <h2>{{ state.currentQuestion }}=</h2>
     <div class="game__answers">
@@ -76,12 +87,7 @@ const checkAnswer = (userAnswer: number) => {
         {{ answer }}
       </button>
     </div>
-    <div class="game__info-container">
-      <h3 class="game__score">score:{{ state.score }}</h3>
-      <div class="game__lives">
-        <img v-for="(_, idx) in state.lives" :key="idx" src="../assets/live.svg" alt="user live" />
-      </div>
-    </div>
+    <GameInfo :lives="state.lives" :score="state.score" />
   </div>
 </template>
 
@@ -97,21 +103,5 @@ const checkAnswer = (userAnswer: number) => {
 }
 .game__answer-btn {
   width: 100%;
-}
-.game__info-container {
-  position: absolute;
-  bottom: -4.5rem;
-  text-align: center;
-  width: 100%;
-}
-.game__score {
-  font-size: 1.5rem;
-  color: #6e6e6e;
-  margin: 0 0 0.25rem;
-}
-.game__lives {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
 }
 </style>
