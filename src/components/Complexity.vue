@@ -48,6 +48,6 @@ const handleComplexityChange = (newComplexity: ComplexityEnum) => {
   width: 100%;
 }
 .complexity__sel-btn.active {
-  background: #747bff;
+  background: var(--highlight-color);
 }
 </style>

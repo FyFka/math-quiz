@@ -32,7 +32,7 @@ defineExpose({ refresh });
 
 <template>
   <div class="timer">
-    <div class="timer__fill" :style="{ width: `${(state.timer / state.initialTime) * 100}%` }">{{ state.timer }}</div>
+    <div class="timer__fill" :style="{ width: `${(state.timer / state.initialTime) * 100}%` }"></div>
   </div>
 </template>
 
@@ -41,13 +41,16 @@ defineExpose({ refresh });
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 0.75rem;
 }
 .timer__fill {
-  background: #747bff;
+  background: var(--highlight-color);
   width: 100%;
   height: 100%;
-  transition: width 1s ease;
+  transition: width 0.25s ease;
+  border-radius: 0.5rem;
 }
 </style>

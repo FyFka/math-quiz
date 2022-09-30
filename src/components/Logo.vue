@@ -6,5 +6,7 @@
 .app-name {
   margin: 0 0 2rem;
   text-transform: uppercase;
+  font-size: 3rem;
+  line-height: 1.1;
 }
 </style>
