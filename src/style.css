@@ -54,8 +54,17 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   padding: 2rem;
   text-align: center;
+}
+
+@media (max-width: 780px) {
+  #app {
+    padding: 0.5rem;
+  }
 }

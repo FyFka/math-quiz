@@ -46,19 +46,20 @@ const handleFinishGame = (score: number) => {
         earum sequi nisi sit voluptatem tempore non delectus animi voluptates quod eaque ex.
       </p>
       <button @click="handleStart" class="start-quiz">Start quiz</button>
-      <div v-if="hasPreviousGame" class="main__prev-game-info">
-        <h3 class="main__prev-score">previous game score:{{ state.prevGameScore }}</h3>
-      </div>
     </div>
     <Complexity :selectedComplexity="state.complexity" @change-complexity="handleComplexityChange" />
+    <div v-if="hasPreviousGame" class="main__prev-game-info">
+      <h3 class="main__prev-score">previous game score:{{ state.prevGameScore }}</h3>
+    </div>
   </div>
-  <div v-if="state.isStarted">
+  <template v-if="state.isStarted">
     <Game :selectedComplexity="state.complexity" @finish-game="handleFinishGame" />
-  </div>
+  </template>
 </template>
 
 <style scoped>
 .main {
+  width: 100%;
   max-width: 44rem;
   position: relative;
 }

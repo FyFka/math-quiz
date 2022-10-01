@@ -93,7 +93,8 @@ const checkAnswer = (userAnswer?: number) => {
 
 <style scoped>
 .game {
-  width: 44rem;
+  width: 100%;
+  max-width: 44rem;
   position: relative;
 }
 .game__answers {
@@ -103,5 +104,11 @@ const checkAnswer = (userAnswer?: number) => {
 }
 .game__answer-btn {
   width: 100%;
+}
+
+@media (max-width: 780px) {
+  .game__answers {
+    flex-direction: column;
+  }
 }
 </style>

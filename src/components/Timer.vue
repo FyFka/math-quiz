@@ -38,19 +38,20 @@ defineExpose({ refresh });
 
 <style scoped>
 .timer {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
   justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 0.75rem;
+  height: 0.5rem;
 }
 .timer__fill {
   background: var(--highlight-color);
   width: 100%;
   height: 100%;
   transition: width 0.25s ease;
-  border-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 </style>
