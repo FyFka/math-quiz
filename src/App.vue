@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import { computed, reactive } from "vue";
+import { reactive } from "vue";
 import Complexity from "./components/Complexity.vue";
 import Logo from "./components/Logo.vue";
 import { ComplexityEnum } from "./interfaces/Complexity";
 import { getFromLocalStorage, setToLocalStorage } from "./utils/localStorage";
 import Game from "./components/Game.vue";
+import PreviousGames from "./components/PreviousGames.vue";
+import { PreviousGamesType } from "./interfaces/PreviousGames";
 
 interface IAppState {
   isStarted: boolean;
   complexity: ComplexityEnum;
-  prevGameScore: number | null;
+  prevGames: PreviousGamesType;
 }
 
 const state = reactive<IAppState>({
   isStarted: false,
   complexity: getFromLocalStorage<ComplexityEnum>("complexity") || ComplexityEnum.NORMAL,
-  prevGameScore: null,
-});
-
-const hasPreviousGame = computed(() => {
-  return state.prevGameScore !== null;
+  prevGames: [],
 });
 
 const handleComplexityChange = (newComplexity: ComplexityEnum) => {
@@ -33,7 +31,7 @@ const handleStart = () => {
 
 const handleFinishGame = (score: number) => {
   state.isStarted = false;
-  state.prevGameScore = score;
+  state.prevGames.push({ time: new Date().toLocaleTimeString(), score });
 };
 </script>
 
@@ -42,15 +40,13 @@ const handleFinishGame = (score: number) => {
     <div class="main__container">
       <Logo />
       <p class="main__rules">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti iste et placeat quisquam rem, eum, ea laborum,
-        earum sequi nisi sit voluptatem tempore non delectus animi voluptates quod eaque ex.
+        The math quiz will take 5 minutes of your time to answer a series of math questions, this math quiz will help
+        you find out how much you know about math and understand your current math skills.
       </p>
       <button @click="handleStart" class="start-quiz">Start quiz</button>
     </div>
     <Complexity :selectedComplexity="state.complexity" @change-complexity="handleComplexityChange" />
-    <div v-if="hasPreviousGame" class="main__prev-game-info">
-      <h3 class="main__prev-score">previous game score:{{ state.prevGameScore }}</h3>
-    </div>
+    <PreviousGames :previous-games="state.prevGames" />
   </div>
   <template v-if="state.isStarted">
     <Game :selectedComplexity="state.complexity" @finish-game="handleFinishGame" />
@@ -71,16 +67,5 @@ const handleFinishGame = (score: number) => {
 }
 .start-quiz {
   width: 100%;
-}
-.main__prev-game-info {
-  position: absolute;
-  bottom: -2rem;
-  width: 100%;
-  text-align: center;
-}
-.main__prev-score {
-  font-size: 1.5rem;
-  color: #6e6e6e;
-  margin: 0;
 }
 </style>
